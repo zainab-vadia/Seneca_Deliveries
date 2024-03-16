@@ -2,20 +2,21 @@
 #include <stdlib.h>
 #include <limits.h>
 
-void findValidTruckPaths(struct Shipment shipment, struct Truck truck, const struct Map* map, struct Route routes[MAX_ROUTE], int* size)
+void findValidPaths(struct Shipment shipment, struct Truck truck, const struct Map *map, struct Route routes[MAX_ROUTE], int *size)
 {
-    int count = 0;
+    int validCount = 0;
     for (int i = 0; i < truck.allocated_shipments; i++)
     {
+
         if (truck.destination_counts[i] == hasDestination(&routes[i], shipment))
         {
             if (!isBuildingIntersected(routes[i], map))
             {
-                routes[count++] = routes[i];
+                routes[validCount++] = routes[i];
             }
         }
-    }
-    *size = count;
+    }              
+    *size = validCount; 
 }
 
 int hasDestination(const struct Route* route, struct Shipment shipment)
@@ -51,17 +52,17 @@ int isBuildingIntersected(const struct Route route, const struct Map* map)
     return 0;
 }
 
-int getBestRoute(struct Route* routes[MAX_ROUTE], struct Shipment shipment, int size)
+int findBestRoute(struct Route *routes[MAX_ROUTE], struct Shipment shipment, int size)
 {
     int shortestDistance = INT_MAX;
     int shortestIndex = -1;
 
     for (int i = 0; i < size; i++)
     {
-        int routeDistance = distance(&routes[i]->points[0], &shipment.destination);
-        if (routeDistance < shortestDistance)
+        int destinationDistance = distance(&routes[i]->points[0], &shipment.destination);
+        if (destinationDistance < shortestDistance)
         {
-            shortestDistance = routeDistance;
+            shortestDistance = destinationDistance;
             shortestIndex = i;
         }
     }
