@@ -3,6 +3,7 @@
 #include "mapping.h"
 
 
+
 struct Truck initializeTruck(struct Route route, char color)
 {
     struct Truck truck = {0};

@@ -60,14 +60,22 @@ void findBestTruck(struct Truck trucks[], int numTrucks, struct Shipment shipmen
 */
 int canShip(struct Truck truck, struct Shipment shipment);
 
-/**
-* checks which truck has more space
-* @param truck1 - truck to be comapred
-* @param truck2 - truck to be compared
-* @returns - true if truck 1 has more space false otherwise
-*/
-int isMoreEmpty(struct Truck truck1, struct Truck truck2);
 
+
+/**
+* input a valid shipment from the terminal
+* @returns - an initialized package if valid, otherwise an empty shipment
+*/
+struct Shipment inputShipment();
+
+/**
+* validate the package and provide an error message
+* @param weight - the weight of the package
+* @param volume - the volume of the package
+* @param destination - the destination of the package
+* @returns - true if the shipment is valid, false otherwise
+*/
+int isValidPackage(double weight, double volume, struct Point destination);
 
 
 
