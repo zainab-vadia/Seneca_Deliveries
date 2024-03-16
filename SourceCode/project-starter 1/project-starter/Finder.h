@@ -12,7 +12,7 @@ struct Shipment
 };
 // Milestone 3_ Function Specification
 
-void findValidTruckPaths(struct Shipment shipment, struct Truck truck, const struct Map* map, struct Route routes[MAX_ROUTE], int* size);
+void findValidPaths(struct Shipment shipment, struct Truck truck, const struct Map* map, struct Route routes[MAX_ROUTE], int* size);
 /**
  * Function: findValidTruckPaths
  * - Populates the "routes" array with routes that reach the given shipment destination.
@@ -25,7 +25,7 @@ void findValidTruckPaths(struct Shipment shipment, struct Truck truck, const str
  */
 
 
-int getBestRoute(struct Route* routes[MAX_ROUTE], struct Shipment shipment, int size);
+int findBestRoute(struct Route* routes[MAX_ROUTE], struct Shipment shipment, int size);
 /*
 * Function:getBestRoute
 finds the index of the route with the shortest distance among the valid routes in the routes array that reach the given shipment destination.
