@@ -21,6 +21,9 @@
     <ClInclude Include="truck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="shipment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mapping.c">
@@ -30,6 +33,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="truck.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shipment.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,21 +4,11 @@
 
 
 #include "mapping.h"
+#include "shipment.h"
 
 #define MAX_VOLUME 50
 #define MAX_WEIGHT 1200
 #define MIN_WEIGHT 0
-#define VALID_BOX_VOLUME {0.5, 1, 5} 
-
-/**
-* A package represents a delivery item with weight, volume, and destination.
-*/
-struct Shipment
-{
-    double weight;  // Weight of the package in kilograms
-    double volume;  // Volume of the package in cubic meters
-    struct Point destination;  // Destination of the package
-};
 
 
 /**
@@ -60,12 +50,11 @@ void findBestTruck(struct Truck trucks[], int numTrucks, struct Shipment shipmen
 */
 int canShip(struct Truck truck, struct Shipment shipment);
 
-
-
 /**
 * input a valid shipment from the terminal
 * @returns - an initialized package if valid, otherwise an empty shipment
 */
+
 struct Shipment inputShipment();
 
 /**
@@ -76,7 +65,5 @@ struct Shipment inputShipment();
 * @returns - true if the shipment is valid, false otherwise
 */
 int isValidPackage(double weight, double volume, struct Point destination);
-
-
 
 #endif

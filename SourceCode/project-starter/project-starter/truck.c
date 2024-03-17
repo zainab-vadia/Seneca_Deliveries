@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "truck.h"
 #include "mapping.h"
-
+#include "shipment.h"
 
 
 struct Truck initializeTruck(struct Route route, char color)
