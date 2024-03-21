@@ -6,44 +6,68 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest1
 {
-	
-
+	struct Map OGMap = populateMap();
+  
 	TEST_CLASS(distanceBlackBox)
 	{
 	public:
-		//TEST CASES FOR PACKAGE
-		TEST_METHOD(T017)
+		TEST_METHOD(T001)
+    {
+				struct Point pt1 = {0,0};
+				struct Point pt2 = {0,3};
+				struct Route exp_res = {{0,1},{0,2},{0,3},3,0};
+				struct Route res = shortestPath(OGMap, pt1, pt2);
+				Assert::IsTrue(areRoutesEqual(expectedPath, result));
+    }
+
+    TEST_METHOD(T002)
 		{
-			double expected = 5.6568542494923806;
-			struct Point p1 = {2, 3};
-			struct Point p2 = {6, 7};
-			double result = distance(&p1, &p2); 
-			Assert::AreEqual(expected, result);
+				// Test case for 2 possible paths
+				struct Point pt1 = {11, 1};
+				struct Point pt2 = {11, 6};
+				struct Route expectedPath1 = {{10, 2}, {10, 3}, {10, 4}, {10, 5}, {11, 6},5,0};
+				struct Route expectedPath1 = {{12, 2}, {12, 3}, {12, 4}, {12, 5}, {11, 6},5,0};
+				struct Route result = shortestPath(OGMap, pt1, pt2);
+				Assert::IsTrue(arePathsEqual(expectedPath, result));
 		}
-		TEST_METHOD(T018)
+
+		TEST_METHOD(T003)
 		{
-			double expected = 5.0;
-			struct Point p1 = { 1.5, 2.5 };
-			struct Point p2 = { 4.5, 6.5 };
-			double result = distance(&p1, &p2);
-			Assert::AreEqual(expected, result);
+				// Error Case
+				struct Point pt1 = {-1, 1};
+				struct Point pt2 = {11, 7};
+				struct Route expectedPath1 = {{0},0,0};
+				struct Route result = shortestPath(OGMap, pt1, pt2);
+				Assert::IsTrue(arePathsEqual(expectedPath, result));
 		}
-		TEST_METHOD(T019)
+
+		TEST_METHOD(T004)
 		{
-			double expected = 33.941125496954278;
-			struct Point p1 = { 1 - 1, 'A' - 'A' };
-			struct Point p2 = { 25 - 1, 'Y' - 'A' };
-			double result = distance(&p1, &p2);
-			Assert::AreEqual(expected, result);
+				// Error case
+				struct Point pt1 = {0, 0};
+				struct Point pt2 = {0, 0};
+				struct Route expectedPath1 = {{0},0,0};
+				struct Route result = shortestPath(OGMap, pt1, pt2);
+				Assert::IsTrue(arePathsEqual(expectedPath, result));
 		}
-		TEST_METHOD(T020)
-		{
-			double expected = 0.0;
-			struct Point p1 = { 0, 0 };
-			struct Point p2 = { 0, 0 };
-			double result = distance(&p1, &p2);
-			Assert::AreEqual(expected, result);
-		}
+		// member functions to help with testing
+		private:
+    bool areRouteEqual(const std::vector<std::pair<int, int>>& path1, const std::vector<std::pair<int, int>>& path2)
+    {
+        if (path1.numPoints != path2.numPoints)
+            return false;
+				}
+				if (path1.numPoints == 0){
+						return true; 
+				}
+        for (int i = 0; i < path1.numPoits; ++i)
+        {
+            if (path1.points[i] != path2.points[i])
+                return false;
+        }
+
+        return true;
+    }
 	};
 
 	
