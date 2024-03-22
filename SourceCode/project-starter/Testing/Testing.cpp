@@ -6,7 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest1
 {
-	TEST_CLASS(distanceBlackBox)
+	TEST_CLASS(shortestPathBlackBox)
 	{
 		public:	
 		TEST_METHOD(T001)
