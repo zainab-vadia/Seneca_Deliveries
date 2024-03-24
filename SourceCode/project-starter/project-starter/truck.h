@@ -2,13 +2,12 @@
 #ifndef TRUCK_H
 #define TRUCK_H
 
-
-#include "mapping.h"
 #include "shipment.h"
+#include "mapping.h"
 
 #define MAX_VOLUME 50
 #define MAX_WEIGHT 1200
-#define MIN_WEIGHT 0
+#define MIN_WEIGHT 1
 
 
 /**
@@ -20,7 +19,7 @@ struct Truck
     double currentVolume;  // Current volume in the truck
     struct Route route;  // Route of the truck
     struct Point location; // loaction of the truck
-    char color;
+    char color; 
     // the location must lie on the route
 };
 
@@ -33,7 +32,7 @@ struct Truck
 struct Truck initializeTruck(struct Route route, char color);
 
 /**
-* Find the best truck to deliver a package based on available space ,volume and distance.
+* Find the best truck to deliver a package based on available space ,volume and distance. 
 * @param trucks - array of trucks available for delivery
 * @param numTrucks - the number of trucks in the array
 * @param shipment - the package to be delivered
@@ -51,19 +50,31 @@ void findBestTruck(struct Truck trucks[], int numTrucks, struct Shipment shipmen
 int canShip(struct Truck truck, struct Shipment shipment);
 
 /**
-* input a valid shipment from the terminal
-* @returns - an initialized package if valid, otherwise an empty shipment
+* checks which truck has more space
+* @param truck1 - truck to be comapred
+* @param truck2 - truck to be compared 
+* @returns - true if truck 1 has more space false otherwise
 */
-
-struct Shipment inputShipment();
+int isMoreEmpty(struct Truck truck1, struct Truck truck2);
 
 /**
-* validate the package and provide an error message
-* @param weight - the weight of the package
-* @param volume - the volume of the package
-* @param destination - the destination of the package
-* @returns - true if the shipment is valid, false otherwise
+* evaluate how much space is available in percentage 
+* @param truck - truck to be evaluated
+* @returns - the percentage value of the space
 */
-int isValidPackage(double weight, double volume, struct Point destination);
+double spacePercentage(struct Truck truck);
+
+/**
+* print the diversion seprated by commas
+* @param route - route to be printed
+*/
+void printDiversions(struct Route* route);
+
+/**
+* print the diversion seprated by commas
+* @param truck - truck, to which the shipment should be added
+* @param shipment - shipment to be added
+*/
+void loadShipment(struct Truck *truck, const struct Shipment shipment);
 
 #endif

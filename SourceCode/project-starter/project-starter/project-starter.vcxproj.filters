@@ -18,10 +18,10 @@
     <ClInclude Include="mapping.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="truck.h">
+    <ClInclude Include="shipment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shipment.h">
+    <ClInclude Include="truck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,10 +32,10 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="truck.c">
+    <ClCompile Include="shipment.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shipment.c">
+    <ClCompile Include="truck.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

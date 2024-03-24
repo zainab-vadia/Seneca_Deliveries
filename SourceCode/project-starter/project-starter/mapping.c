@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
 #include "mapping.h"
 #include "math.h"
 
@@ -61,7 +62,7 @@ void printMap(const struct Map* map, const int base1, const int alphaCols)
 
 	printf("%4s", " ");
 	for (c = 0; c < map->numCols; c++)
-	{
+	{	
 		if (alphaCols) printf("%c", 'A' + c);
 		else printf("%d", c % 10);
 	}
@@ -135,7 +136,7 @@ struct Route getGreenRoute()
 			{7, 19},
 			{8, 19},
 			{9, 19},{9, 20},{9, 21},{9, 22},{9, 23},{9, 24}
-
+			
 		},
 			42, GREEN
 	};
@@ -150,7 +151,7 @@ struct Route getYellowRoute()
 			{1, 0},
 			{2, 0},
 			{3, 0},
-			{4, 0}, {4, 1}, {4, 2}, {4, 3},
+			{4, 0}, {4, 1}, {4, 2}, {4, 3}, 
 			{5, 3},
 			{6, 3},
 			{7, 3},
@@ -210,7 +211,7 @@ void addPointToRoute(struct Route* route, const int row, const int col)
 void addPointToRouteIfNot(struct Route* route, const int row, const int col, const struct Point notThis)
 {
 	struct Point pt = { row, col };
-	if (notThis.row != row || notThis.col != col) addPtToRoute(route, pt);
+	if(notThis.row != row || notThis.col != col) addPtToRoute(route, pt);
 }
 
 double distance(const struct Point* p1, const struct Point* p2)
@@ -224,19 +225,30 @@ double distance(const struct Point* p1, const struct Point* p2)
 struct Route shortestPath(const struct Map* map, const struct Point start, const struct Point dest)
 {
 	struct Route result = { {0,0}, 0, DIVERSION };
+	struct Route empty = { {0,0}, 0, DIVERSION };
 	struct Point last = { -1, -1 };
 	struct Point current = start;
 	struct Route possible = { {0,0},0,0 };
 	int close = 0;
-
+	addPtToRoute(&result, start);
+	
 	while (!eqPt(current, dest) && close >= 0)
 	{
+		if (areNeighbour(current, dest))
+		{
+			addPtToRoute(&result, dest);
+			return result;
+		}
 		possible = getPossibleMoves(map, current, last);
 		close = getClosestPoint(&possible, dest);
 		if (close >= 0)
 		{
 			last = current;
 			current = possible.points[close];
+			if (isPointOf(result, current))
+			{
+				return empty; 
+			}
 			addPtToRoute(&result, current);
 		}
 	}
@@ -244,37 +256,94 @@ struct Route shortestPath(const struct Map* map, const struct Point start, const
 	return result;
 }
 
+struct Route shortestRoute(const struct Map* map, const struct Point start, const struct Point dest, struct Route route)
+{
+	if (areNeighbour(start, dest) || eqPt(dest, start))
+	{
+		addPtToRoute(&route, start);
+		addPtToRoute(&route, dest);
+		return route;
+	}
+
+	addPtToRoute(&route, start);
+	struct Route temp = getPossibleMoves(map, start, start);
+	int distance = abs(dest.col - start.col) + abs(dest.row - start.row);
+	int i = 0;
+	for (i = 0; i < temp.numPoints; i++)
+	{
+		int newdist = abs(dest.col - temp.points[i].col) + abs(dest.row - temp.points[i].row);
+		if (newdist < distance)
+			return shortestRoute(map, temp.points[i], dest, route);
+	}
+	struct Route empty = { {0,0}, 0, DIVERSION };
+	return empty;
+}
+
+
+struct Route nearestPoint(const struct Map* map, const struct Route route, const struct Point dest)
+{
+	struct Route result = { {0,0}, 1000, DIVERSION };
+	struct Route empty = { {0,0}, 0, DIVERSION };
+	struct Route temp = { {0,0}, 0, DIVERSION };
+	struct Point dropOff;
+
+	struct Route temp1 = getPossibleMoves(map, dest, dest);
+	if (temp1.numPoints == 0) return empty; 
+		int idx = getClosestPoint(&temp1, dest);
+		dropOff = temp1.points[idx];
+
+
+	int i = 0;
+	for (i = 0; i < route.numPoints; i++)
+	{
+		if (areNeighbour(route.points[i], dest))
+		{
+			struct Route empty = { {0,0}, 0, DIVERSION };
+			addPtToRoute(&empty, route.points[i]);
+			addPtToRoute(&empty, dest);
+			result = empty; 
+		}
+		else
+		{
+			// temp = shortestPath(map, route.points[i], dest);
+			temp = shortestRoute(map, route.points[i], dropOff, empty);
+			if (!eqPt(dest, dropOff) && temp.numPoints != 0) addPtToRoute(&temp, dest);
+		}
+		if (temp.numPoints != 0 && temp.numPoints < result.numPoints)
+		{
+			result = temp;
+		}
+	}
+
+	return result; 
+}
+
 struct Route getPossibleMoves(const struct Map* map, const struct Point p1, const struct Point backpath)
 {
 	struct Route result = { {0,0}, 0, DIVERSION };
 
-	if (p1.row > 0)
+	if (p1.row > 0 )
 	{
-		if (map->squares[p1.row - 1][p1.col] != 1) addPointToRouteIfNot(&result, p1.row - 1, p1.col, backpath);	// square above
-		if (p1.col > 0 && map->squares[p1.row - 1][p1.col - 1] != 1) addPointToRouteIfNot(&result, p1.row - 1, p1.col - 1, backpath);	// top left
-		if (p1.col < (map->numCols - 1) && map->squares[p1.row - 1][p1.col + 1] != 1) addPointToRouteIfNot(&result, p1.row - 1, p1.col + 1, backpath);	// top right
+		if(map->squares[p1.row - 1][p1.col] != 1) addPointToRouteIfNot(&result, p1.row - 1, p1.col, backpath);	// square above
+		//if (p1.col > 0 && map->squares[p1.row - 1][p1.col-1] != 1) addPointToRouteIfNot(&result, p1.row - 1, p1.col-1, backpath);	// top left
+		//if (p1.col < (map->numCols-1) && map->squares[p1.row - 1][p1.col + 1] != 1) addPointToRouteIfNot(&result, p1.row - 1, p1.col + 1, backpath);	// top right
 	}
-	if (p1.col > 0 && map->squares[p1.row][p1.col - 1] != 1)addPointToRouteIfNot(&result, p1.row, p1.col - 1, backpath);	// left
-	if (p1.col < (map->numCols - 1) && map->squares[p1.row][p1.col + 1] != 1)addPointToRouteIfNot(&result, p1.row, p1.col + 1, backpath);	// right
 	if (p1.row < (map->numRows - 1))
 	{
 		if (map->squares[p1.row + 1][p1.col] != 1) addPointToRouteIfNot(&result, p1.row + 1, p1.col, backpath);	// square below
-		if (p1.col > 0 && map->squares[p1.row + 1][p1.col - 1] != 1) addPointToRouteIfNot(&result, p1.row + 1, p1.col - 1, backpath);	// bot left
-		if (p1.col < (map->numCols - 1) && map->squares[p1.row + 1][p1.col + 1] != 1) addPointToRouteIfNot(&result, p1.row + 1, p1.col + 1, backpath);	// top right
+		//if (p1.col > 0 && map->squares[p1.row + 1][p1.col - 1] != 1) addPointToRouteIfNot(&result, p1.row + 1, p1.col - 1, backpath);	// bot left
+		//if (p1.col < (map->numCols - 1) && map->squares[p1.row + 1][p1.col + 1] != 1) addPointToRouteIfNot(&result, p1.row + 1, p1.col + 1, backpath);	// top right
 	}
+	if (p1.col > 0 && map->squares[p1.row][p1.col - 1] != 1)addPointToRouteIfNot(&result, p1.row, p1.col - 1, backpath);	// left
+	if (p1.col < (map->numCols - 1) && map->squares[p1.row][p1.col + 1] != 1)addPointToRouteIfNot(&result, p1.row, p1.col + 1, backpath);	// right
 
 	return result;
-}
-
-int eqPt(const struct Point p1, const struct Point p2)
-{
-	return p1.row == p2.row && p1.col == p2.col;
 }
 
 int getClosestPoint(const struct Route* route, const struct Point pt)
 {
 	int i, closestIdx = -1;
-	double closestDist = 999999.99, dist;
+	double closestDist = 999999.9, dist;
 
 	for (i = 0; i < route->numPoints; i++)
 	{
@@ -286,4 +355,36 @@ int getClosestPoint(const struct Route* route, const struct Point pt)
 		}
 	}
 	return closestIdx;
+}
+
+int eqPt(const struct Point p1, const struct Point p2)
+{
+	return p1.row == p2.row && p1.col == p2.col;
+}
+
+int isBuilding(const struct Point p, const struct Map map)
+{
+	if (p.row < 0 || p.row >= MAP_ROWS || p.col < 0 || p.col >= MAP_COLS)
+	{
+		return 0;
+	}
+	return map.squares[p.row][p.col];
+}
+
+int areNeighbour(const struct Point current, const struct Point dest)
+{
+	return (current.col == dest.col && (current.row == dest.row + 1 || current.row == dest.row - 1)) ||(current.row == dest.row && (current.col == dest.col + 1 || current.col == dest.col - 1));
+}
+
+int isPointOf(const struct Route route, const struct Point point)
+{
+	int i = 0;
+	for (i = 0; i < route.numPoints; i++)
+	{
+		if (eqPt(route.points[i], point))
+		{
+			return 1;
+		}
+	}
+	return 0;
 }

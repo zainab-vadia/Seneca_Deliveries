@@ -1,0 +1,16 @@
+﻿  acceptanceTest.c
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\acceptanceTest.c(46,27): warning C4047: 'function': 'Truck *' differs in levels of indirection from 'Truck (*)[3]'
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\acceptanceTest.c(46,27): warning C4024: 'findBestTruck': different types for formal and actual parameter 1
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\acceptanceTest.c(87,27): warning C4047: 'function': 'Truck *' differs in levels of indirection from 'Truck (*)[3]'
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\acceptanceTest.c(87,27): warning C4024: 'findBestTruck': different types for formal and actual parameter 1
+  integrationTest.c
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\integrationTest.c(39,27): warning C4047: 'function': 'Truck *' differs in levels of indirection from 'Truck (*)[3]'
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\integrationTest.c(39,27): warning C4024: 'findBestTruck': different types for formal and actual parameter 1
+  main.c
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\main.c(70,35): warning C4047: 'function': 'Truck *' differs in levels of indirection from 'Truck (*)[3]'
+C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\project-starter\main.c(70,35): warning C4024: 'findBestTruck': different types for formal and actual parameter 1
+  mapping.c
+  shipment.c
+  truck.c
+  Generating Code...
+  project-starter.vcxproj -> C:\Users\Pranay\OneDrive - Seneca\Documents\Desktop\repo\Fall23-SFT221-ZCC-4\root\SourceCode\project-starter\x64\Debug\project-starter.exe

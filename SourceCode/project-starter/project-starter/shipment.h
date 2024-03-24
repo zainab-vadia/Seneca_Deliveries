@@ -17,6 +17,18 @@ struct Shipment
     struct Point destination;  // Destination of the package
 };
 
+/**
+* input a valid shipment from the terminal
+* @returns - an initialized package if valid, otherwise an empty shipment
+*/
+struct Shipment inputShipment();
 
-
+/**
+* validate the package and provide an error message 
+* @param weight - the weight of the package
+* @param volume - the volume of the package
+* @param destination - the destination of the package
+* @returns - true if the shipment is valid, false otherwise
+*/
+int isValidPackage(double weight, double volume, struct Point destination);
 #endif
