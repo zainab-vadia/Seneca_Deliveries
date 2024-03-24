@@ -30,5 +30,5 @@ Getting Started
 To run the program:
 
 1- Clone the repository:
-git clone [https://github.senecapolytechnic.ca/akumar239/winter24-sft221-zaa-2.git](
+git clone [https://github.senecapolytechnic.ca/akumar239/winter24-sft221-zaa-2.git]
 2- Compile and execute the main program.
