@@ -48,7 +48,7 @@ namespace UnitTest1
 			int expected = 0; // False
 			double weight = 1800;
 			double volume = 1;
-			struct Point destination = { 3 - 1 , 'E' - 'A' };
+			struct Point destination = { 40 - 1 , 'S' - 'A' };
 			// represents the address '40S'
 			int result = isValidPackage(weight, volume, destination);
 			Assert::AreEqual(expected, result);
