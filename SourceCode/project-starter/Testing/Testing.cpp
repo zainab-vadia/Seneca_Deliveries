@@ -186,15 +186,15 @@ public:
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
-		printf("Manual Test T009: Run the program and enter '1100 2 17G' when prompted for shipment details.\n");
+		printf("Manual Test T009: Run the program and enter '1600 1 17G' when prompted for shipment details.\n");
 		printf("Expected Result: The input should be rejected with an appropriate message indicating the weight violation.\n");
 	}
 
 	TEST_METHOD(T018) {
-		// Manual Test: Testing invalid weight input (exceeding the maximum weight limit).
+		// Manual Test: Testing invalid size.
 		// Test Data: "1100 2 17G"
-		// Expected Result: Function should indicate the weight is invalid (must be 1-1200 Kg.)
-
+		// Expected Result: Function should indicate the size is invalid
+		
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
 		printf("Manual Test T010: Run the program and enter '1100 2 17G' when prompted for shipment details.\n");
@@ -202,9 +202,9 @@ public:
 	}
 
 	TEST_METHOD(T019) {
-		// Manual Test: Testing invalid weight input (exceeding the maximum weight limit).
+		// Manual Test: Testing invalid destination
 		// Test Data: "1100 5 29G"
-		// Expected Result: Function should indicate the weight is invalid (must be 1-1200 Kg.)
+		// Expected Result: Function should indicate the destination is invalid
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
@@ -213,9 +213,9 @@ public:
 	}
 
 	TEST_METHOD(T020) {
-		// Manual Test: Testing invalid weight input (exceeding the maximum weight limit).
+		// Manual Test: Testing valid
 		// Test Data: "500 1 3E"
-		// Expected Result: Function should indicate the weight is invalid (must be 1-1200 Kg.)
+		// Expected Result: Function should initalize shipment
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
