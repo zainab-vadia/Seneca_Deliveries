@@ -16,7 +16,7 @@ struct Truck configureTruck(struct Route route, char color)
     return truck;
 }
 
-void apropriateTruck(struct Truck trucks[], int numTrucks, struct Shipment shipment, const struct Map* map)
+void appropriateTruck(struct Truck trucks[], int numTrucks, struct Shipment shipment, const struct Map* map)
 {
     int i = -1;
     int leastDistance = -1;
