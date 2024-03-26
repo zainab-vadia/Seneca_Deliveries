@@ -16,14 +16,14 @@ struct Truck configureTruck(struct Route route, char color)
     return truck;
 }
 
-void appropriateTruck(struct Truck trucks[], int numTrucks, struct Shipment shipment, const struct Map* map)
+void appropriateTruck(struct Truck trucks[], int numOfTrucks, struct Shipment shipment, const struct Map* map)
 {
     int i = -1;
     int leastDistance = -1;
-    int truckIndex = -1;
+    int truckNumber = -1;
     struct Route BestRoute = { 0 };
 
-    for (i = 0; i < numTrucks; i++)
+    for (i = 0; i < numOfTrucks; i++)
     {
         if (enoughSpace(trucks[i], shipment))
         {
@@ -33,28 +33,28 @@ void appropriateTruck(struct Truck trucks[], int numTrucks, struct Shipment ship
             if (route.numPoints > 0 &&
                 (route.numPoints < leastDistance ||
                     leastDistance == -1 ||
-                    (leastDistance == route.numPoints && moreSpace(trucks[i], trucks[truckIndex]))))
+                    (leastDistance == route.numPoints && moreSpace(trucks[i], trucks[truckNumber]))))
             {
                 BestRoute = route;
-                truckIndex = i;
+                truckNumber = i;
                 leastDistance = BestRoute.numPoints;
             }
         }
     }
 
-    if (truckIndex != -1)
+    if (truckNumber != -1)
     {
-        loadShipmentDiversions(&trucks[truckIndex], shipment);
+        loadDiversions(&trucks[truckNumber], shipment);
         printf("Ship on ");
-        if (trucks[truckIndex].pathColor == 'B')
+        if (trucks[truckNumber].pathColor == 'B')
         {
             printf("BLUE LINE, ");
         }
-        else if (trucks[truckIndex].pathColor == 'Y')
+        else if (trucks[truckNumber].pathColor == 'Y')
         {
             printf("YELLOW LINE, ");
         }
-        else if (trucks[truckIndex].pathColor == 'G')
+        else if (trucks[truckNumber].pathColor == 'G')
         {
             printf("GREEN LINE, ");
         }
@@ -72,15 +72,15 @@ int enoughSpace(struct Truck truck, struct Shipment shipment) {
     double availableWeight = MAX_WEIGHT - truck.presentWeightInKg;
     double availableVolume = MAX_VOLUME - truck.presentVolumeInM;
 
-    int isWeightSufficient = availableWeight >= shipment.weight;
-    int isVolumeSufficient = availableVolume >= shipment.volume;
+    double isWeightSufficient = availableWeight >= shipment.weight;
+    double isVolumeSufficient = availableVolume >= shipment.volume;
 
     return isWeightSufficient && isVolumeSufficient;
 }
 
-int moreSpace(struct Truck truck1, struct Truck truck2)
+int moreSpace(struct Truck t1, struct Truck t2)
 {
-    return availablePercentageLeft(truck1) > availablePercentageLeft(truck2);
+    return availablePercentageLeft(t1) > availablePercentageLeft(t2);
 }
 
 double availablePercentageLeft(struct Truck truck)
@@ -106,7 +106,7 @@ void truckDiversions(struct Route* route)
     }
 }
 
-void loadShipmentDiversions(struct Truck* truck, const struct Shipment shipment)
+void loadDiversions(struct Truck* truck, const struct Shipment shipment)
 {
     if (enoughSpace(*truck, shipment))
     {
