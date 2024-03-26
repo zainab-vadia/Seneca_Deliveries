@@ -5,51 +5,62 @@
 #include "mapping.h"
 #include "truck.h"
 
-struct Shipment inputShipment()
+// Read shipment details from the user input
+struct Shipment readShipmentDetails()
 {
-    struct Shipment shipment = { 0,0 ,{0,0} };
-    int temp1 = 0, valid, check = 0;
-    char temp2 = 0; 
+    struct Shipment shipment = {0, 0, {0, 0}};
+    int temp1 = 0, validInput, isShipmentValid = 0;
+    char temp2 = 0;
 
     do {
-        printf("Enter shipment weight, box size and destination (0 0 x to stop): ");
-        valid = scanf("%lf %lf %d%c", &shipment.weight, &shipment.volume, &temp1, &temp2);
-        if(valid == 4)
-        {
-            shipment.destination.row = temp1 - 1; 
-            shipment.destination.col = toupper(temp2)-'A';
-            check = isValidPackage(shipment.weight, shipment.volume, shipment.destination); 
+        printf("Enter shipment weight, box size, and destination (0 0 x to stop): ");
+        validInput = scanf("%lf %lf %d%c", &shipment.weight, &shipment.volume, &temp1, &temp2);
+        if (validInput == 4) { // if the user input matches the expected format
+            shipment.destination.row = temp1 - 1; // Adjusting user input to zero-based index
+            shipment.destination.col = toupper(temp2) - 'A'; // Convert column to zero-based index
+            isShipmentValid = validateShipment(shipment.weight, shipment.volume, shipment.destination);
+        } else {
+            isShipmentValid = 1; // If input doesn't match expected format, try again
         }
-        else
-        {
-            check = 1;
-        }
-    } while (!check);
+    } while (!isShipmentValid);
 
+    // Clear the input buffer
     while ((temp1 = getchar()) != '\n' && temp1 != EOF);
     return shipment;
 }
 
-int isValidPackage(double weight, double volume,struct Point destination)
+// Validates the details of the shipment
+int validateShipment(double weight, double volume, struct Point destination)
 {
     double validVolume[3] = VALID_BOX_VOLUME;
-    int flag = 1;
-    struct Map map = populateMap(); 
+    int isValid = 1; // Assume the shipment is valid initially
+    struct Map map = populateMap(); // Assume this function populates a map of valid destinations
 
-    if (weight > MAX_WEIGHT || weight <= MIN_WEIGHT)
+    // Weight validation
+    if (weight > MAX_WEIGHT || weight < MIN_WEIGHT)
     {
         printf("Invalid weight (must be %.lf-%.lf Kg.)\n", (double)(MIN_WEIGHT), (double)(MAX_WEIGHT));
-        flag = 0;
+        isValid = 0;
     }
-    if (!(volume == validVolume[0] || volume == validVolume[1] || volume == validVolume[2]))
-    {
-        printf("Invalid size\n");
-        flag = 0;
+
+    // Volume validation
+    int volumeIsValid = 0;
+    for (int i = 0; i < sizeof(validVolume) / sizeof(validVolume[0]); i++) {
+        if (volume == validVolume[i]) {
+            volumeIsValid = 1;
+            break;
+        }
     }
-    if (!isBuilding(destination, map))
-    {
+    if (!volumeIsValid) {
+        printf("Invalid box size\n");
+        isValid = 0;
+    }
+
+    // Destination validation
+    if (!BuildingBlock(destination, map)) {
         printf("Invalid destination\n");
-        flag = 0;
+        isValid = 0;
     }
-    return flag;
+
+    return isValid;
 }
