@@ -36,9 +36,10 @@ struct Truck configureTruck(struct Route route, char color);
 * @param numTrucks - the number of trucks in the array
 * @param shipment - the package to be delivered
 * @param map - the map to be referenced
+* @param color - the color or identifier for the truck's route
 * @returns - the index of the best truck to deliver the package, or -1 if no suitable truck is found
 */
-void apropriateTruck(struct Truck trucks[], int numTrucks, struct Shipment shipment, const struct Map* map);
+void appropriateTruck(struct Truck trucks[], int numTrucks, struct Shipment shipment, const struct Map* map);
 
 /**
 * checks whether the truck has enough space for the Shipment
@@ -57,7 +58,7 @@ int enoughSpace(struct Truck truck, struct Shipment shipment);
 int moreSpace(struct Truck truck1, struct Truck truck2);
 
 /**
-* calculate the space is available in percentage
+* Calculates the percentage of space (both volume and weight) still available in the truck.
 * @param truck - truck to be evaluated
 * @returns - the percentage value of the space
 */
