@@ -234,7 +234,7 @@ struct Route shortestPath(const struct Map* map, const struct Point start, const
 	
 	while (!eqPt(current, dest) && close >= 0)
 	{
-		if (areNeighbour(current, dest))
+		if (areDirectNeighbors(current, dest))
 		{
 			addPtToRoute(&result, dest);
 			return result;
@@ -245,7 +245,7 @@ struct Route shortestPath(const struct Map* map, const struct Point start, const
 		{
 			last = current;
 			current = possible.points[close];
-			if (isPointOf(result, current))
+			if (containsPoint(result, current))
 			{
 				return empty; 
 			}
@@ -256,9 +256,9 @@ struct Route shortestPath(const struct Map* map, const struct Point start, const
 	return result;
 }
 
-struct Route shortestRoute(const struct Map* map, const struct Point start, const struct Point dest, struct Route route)
+struct Route BestRoute(const struct Map* map, const struct Point start, const struct Point dest, struct Route route)
 {
-	if (areNeighbour(start, dest) || eqPt(dest, start))
+	if (areDirectNeighbors(start, dest) || eqPt(dest, start))
 	{
 		addPtToRoute(&route, start);
 		addPtToRoute(&route, dest);
@@ -273,14 +273,14 @@ struct Route shortestRoute(const struct Map* map, const struct Point start, cons
 	{
 		int newdist = abs(dest.col - temp.points[i].col) + abs(dest.row - temp.points[i].row);
 		if (newdist < distance)
-			return shortestRoute(map, temp.points[i], dest, route);
+			return BestRoute(map, temp.points[i], dest, route);
 	}
 	struct Route empty = { {0,0}, 0, DIVERSION };
 	return empty;
 }
 
 
-struct Route nearestPoint(const struct Map* map, const struct Route route, const struct Point dest)
+struct Route findClosestPoint(const struct Map* map, const struct Route route, const struct Point dest)
 {
 	struct Route result = { {0,0}, 1000, DIVERSION };
 	struct Route empty = { {0,0}, 0, DIVERSION };
@@ -296,7 +296,7 @@ struct Route nearestPoint(const struct Map* map, const struct Route route, const
 	int i = 0;
 	for (i = 0; i < route.numPoints; i++)
 	{
-		if (areNeighbour(route.points[i], dest))
+		if (areDirectNeighbors(route.points[i], dest))
 		{
 			struct Route empty = { {0,0}, 0, DIVERSION };
 			addPtToRoute(&empty, route.points[i]);
@@ -306,7 +306,7 @@ struct Route nearestPoint(const struct Map* map, const struct Route route, const
 		else
 		{
 			// temp = shortestPath(map, route.points[i], dest);
-			temp = shortestRoute(map, route.points[i], dropOff, empty);
+			temp = BestRoute(map, route.points[i], dropOff, empty);
 			if (!eqPt(dest, dropOff) && temp.numPoints != 0) addPtToRoute(&temp, dest);
 		}
 		if (temp.numPoints != 0 && temp.numPoints < result.numPoints)
@@ -362,29 +362,32 @@ int eqPt(const struct Point p1, const struct Point p2)
 	return p1.row == p2.row && p1.col == p2.col;
 }
 
-int isBuilding(const struct Point p, const struct Map map)
+int BuildingBlock(const struct Point point, const struct Map map)
 {
-	if (p.row < 0 || p.row >= MAP_ROWS || p.col < 0 || p.col >= MAP_COLS)
+	if (point.row < 0 || point.row >= MAP_ROWS || point.col < 0 || point.col >= MAP_COLS)
 	{
 		return 0;
 	}
-	return map.squares[p.row][p.col];
+	return map.squares[point.row][point.col];
 }
 
-int areNeighbour(const struct Point current, const struct Point dest)
+int areDirectNeighbors(const struct Point current, const struct Point target)
 {
-	return (current.col == dest.col && (current.row == dest.row + 1 || current.row == dest.row - 1)) ||(current.row == dest.row && (current.col == dest.col + 1 || current.col == dest.col - 1));
+	// This function checks if two points are directly next to each other on a grid
+	return (current.col == target.col && (current.row == target.row + 1 || current.row == target.row - 1)) ||
+		(current.row == target.row && (current.col == target.col + 1 || current.col == target.col - 1));
 }
 
-int isPointOf(const struct Route route, const struct Point point)
+int containsPoint(const struct Route route, const struct Point point)
 {
-	int i = 0;
-	for (i = 0; i < route.numPoints; i++)
+	// This function iterates through a route to check if a specific point is included
+	for (int i = 0; i < route.numPoints; i++)
 	{
-		if (eqPt(route.points[i], point))
+		if (eqPt(route.points[i], point))  // Assuming eqPt checks for equality between two points
 		{
-			return 1;
+			return 1; // The route contains the specified point
 		}
 	}
-	return 0;
+	return 0; // The point is not part of the route
 }
+
