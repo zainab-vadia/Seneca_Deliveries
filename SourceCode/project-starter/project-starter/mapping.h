@@ -155,7 +155,7 @@ struct Route shortestPath(const struct Map* map, const struct Point start, const
 * @returns - the shortest path from start to dest. If there is no path, then a Route of zero length is returned.If start
 * and dest are the same point, it also returns a Route of zero length.
 */
-struct Route shortestRoute(const struct Map* map, const struct Point start, const struct Point dest, struct Route route);
+struct Route BestRoute(const struct Map* map, const struct Point start, const struct Point dest, struct Route route);
 
 /**
 * find the point of a route, from which we the destination is nearest
@@ -164,7 +164,7 @@ struct Route shortestRoute(const struct Map* map, const struct Point start, cons
 * @param dest - the point to go to
 * @returns - the shortest path from route to dest. If there is no path, then a Route of zero length is returned.
 */
-struct Route nearestPoint(const struct Map* map, const struct Route route, const struct Point dest);
+struct Route findClosestPoint(const struct Map* map, const struct Route route, const struct Point dest);
 
 /**
 * Calculate all adjacent squares to a given point so that the squares do not overpal a building and do not include the backpath.
@@ -198,7 +198,7 @@ int eqPt(const struct Point p1, const struct Point p2);
 * @param map - the map to be referenced
 * @returns - true if the point is building otherwise false
 */
-int isBuilding(const struct Point p, const struct Map map);
+int BuildingBlock(const struct Point p, const struct Map map);
 
 /**
 * checks whether points are neighbour 
@@ -206,7 +206,7 @@ int isBuilding(const struct Point p, const struct Map map);
 * @param dest - point to be checked
 * @returns - true if the points are neighbour otherwise false
 */
-int areNeighbour(const struct Point current, const struct Point dest);
+int areDirectNeighbors(const struct Point current, const struct Point target);
 
 /**
 * checks whether point exist in the route
@@ -214,5 +214,6 @@ int areNeighbour(const struct Point current, const struct Point dest);
 * @param point - point to be checked
 * @returns - true if the points exist otherwise false
 */
-int isPointOf(const struct Route route, const struct Point point);
+
+int containsPoint(const struct Route route, const struct Point point);
 #endif
