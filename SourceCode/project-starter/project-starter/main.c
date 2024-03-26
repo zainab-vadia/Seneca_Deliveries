@@ -47,7 +47,7 @@ int main(void)
                 shipment = readShipmentDetails();
                 if (shipment.weight != 0)
                 {
-                    apropriateTruck(trucks, 3, shipment, &baseMap);
+                    appropriateTruck(trucks, 3, shipment, &baseMap);
                 }
             } while (shipment.weight != 0);
             break;
