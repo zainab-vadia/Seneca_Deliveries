@@ -38,16 +38,16 @@ int main(void)
             greenRoute = getGreenRoute();
             yellowRoute = getYellowRoute();
 
-            trucks[0] = initializeTruck(blueRoute, 'B');
-            trucks[1] = initializeTruck(yellowRoute, 'Y');
-            trucks[2] = initializeTruck(greenRoute, 'G');
+            trucks[0] = configureTruck(blueRoute, 'B');
+            trucks[1] = configureTruck(yellowRoute, 'Y');
+            trucks[2] = configureTruck(greenRoute, 'G');
 
             do
             {
-                shipment = inputShipment();
+                shipment = readShipmentDetails();
                 if (shipment.weight != 0)
                 {
-                    findBestTruck(trucks, 3, shipment, &baseMap);
+                    apropriateTruck(trucks, 3, shipment, &baseMap);
                 }
             } while (shipment.weight != 0);
             break;
