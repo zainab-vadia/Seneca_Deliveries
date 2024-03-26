@@ -282,38 +282,38 @@ public:
 	TEST_CLASS(areNeighbourWhiteBox)
 	{
 	public:
-		//TEST CASES FOR PACKAGE
-		TEST_METHOD(TW009)
-		{
-			int expected = 1; // True
-			struct Point p1 = { 5 , 'J' - 'A' };
-			struct Point p2 = { 5 , 'K' - 'A' };
-			int result = areNeighbour(p1, p2);
-			Assert::AreEqual(expected, result);
-		}
-		TEST_METHOD(TW010)
-		{
-			int expected = 1; // True
-			struct Point p1 = { 7  , 'T' - 'A' };
-			struct Point p2 = { 8  , 'T' - 'A' };
-			int result = areNeighbour(p1, p2);
-			Assert::AreEqual(expected, result);
-		}
-		TEST_METHOD(TW011)
-		{
-			int expected = 0; // False
-			struct Point p1 = { 1 , 'J' - 'A' };
-			struct Point p2 = { 3 , 'S' - 'A' };
-			int result = areNeighbour(p1, p2);
-			Assert::AreEqual(expected, result);
-		}
-		TEST_METHOD(TW012)
-		{
-			int expected = 0; // False
-			struct Point p1 = { 13  , 'H' - 'A' };
-			struct Point p2 = { 13  , 'H' - 'A' };
-			int result = areNeighbour(p1, p2);
-			Assert::AreEqual(expected, result);
+	//TEST CASES FOR PACKAGE
+	TEST_METHOD(TW009)
+	{
+		int expected = 1; // True
+		struct Point p1 = { 5 - 1 , 'J' - 'A' };
+		struct Point p2 = { 5 - 1, 'K' - 'A' };
+		int result = areNeighbour(p1, p2);
+		Assert::AreEqual(expected, result);
+	}
+	TEST_METHOD(TW010)
+	{
+		int expected = 1; // True
+		struct Point p1 = { 7 - 1 , 'T' - 'A' };
+		struct Point p2 = { 8 - 1 , 'T' - 'A' };
+		int result = areNeighbour(p1, p2);
+		Assert::AreEqual(expected, result);
+	}
+	TEST_METHOD(TW011)
+	{
+		int expected = 0; // False
+		struct Point p1 = { 1 - 1 , 'J' - 'A' };
+		struct Point p2 = { 3 - 1, 'S' - 'A' };
+		int result = areNeighbour(p1, p2);
+		Assert::AreEqual(expected, result);
+	}
+	TEST_METHOD(TW012)
+	{
+		int expected = 0; // False
+		struct Point p1 = { 13 - 1 , 'H' - 'A' };
+		struct Point p2 = { 13 - 1 , 'H' - 'A' };
+		int result = areNeighbour(p1, p2);
+		Assert::AreEqual(expected, result);
 		}
 	};
 
