@@ -78,5 +78,3 @@ void loadDiversions(struct Truck* truck, const struct Shipment shipment);
 
 #endif
 
-
-//WRONG
