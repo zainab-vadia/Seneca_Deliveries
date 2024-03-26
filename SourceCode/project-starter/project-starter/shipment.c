@@ -32,7 +32,7 @@ struct Shipment readShipmentDetails()
 // Validates the details of the shipment
 int validateShipment(double weight, double volume, struct Point destination)
 {
-    double validVolume[3] = VALID_BOX_VOLUME;
+    double validVolume[3] = VALID_BOX_SIZE;
     int isValid = 1; // Assume the shipment is valid initially
     struct Map map = populateMap(); // Assume this function populates a map of valid destinations
 
