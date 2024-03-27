@@ -147,24 +147,24 @@ double distance(const struct Point* p1, const struct Point* p2);
 struct Route shortestPath(const struct Map* map, const struct Point start, const struct Point dest);
 
 /**
-* Calculate the shortest path between two points so that the path does not pass through buildings.
+* Calculate the best route between two points so that the path does not pass through buildings.
 * @param map - the map showing the location of buildings.
 * @param start - the point to start from
-* @param dest - the point to go to
+* @param destination - the point to go to
 * @param route - a temp route to save the answer 
-* @returns - the shortest path from start to dest. If there is no path, then a Route of zero length is returned.If start
+* @returns - the best route from start to destination. If there is no path, then a Route of zero length is returned.If start
 * and dest are the same point, it also returns a Route of zero length.
 */
-struct Route shortestRoute(const struct Map* map, const struct Point start, const struct Point dest, struct Route route);
+struct Route BestRoute(const struct Map* map, const struct Point start, const struct Point destination, struct Route route);
 
 /**
 * find the point of a route, from which we the destination is nearest
 * @param map - the map showing the location of buildings.
 * @param route - the route to serach from 
-* @param dest - the point to go to
+* @param destination - the point to go to
 * @returns - the shortest path from route to dest. If there is no path, then a Route of zero length is returned.
 */
-struct Route nearestPoint(const struct Map* map, const struct Route route, const struct Point dest);
+struct Route findClosestPoint(const struct Map* map, const struct Route route, const struct Point destination);
 
 /**
 * Calculate all adjacent squares to a given point so that the squares do not overpal a building and do not include the backpath.
@@ -194,25 +194,26 @@ int eqPt(const struct Point p1, const struct Point p2);
 
 /**
 * checks whether a point provided is a building or not
-* @param p - point to be checked
-* @param map - the map to be referenced
+* @param point - point to be assessed
+* @param map - the map to be referenced to
 * @returns - true if the point is building otherwise false
 */
-int isBuilding(const struct Point p, const struct Map map);
+int BuildingBlock(const struct Point point, const struct Map map);
 
 /**
-* checks whether points are neighbour 
-* @param current - point to be checked
-* @param dest - point to be checked
+* checks whether points are direct neighbours(next to each other) 
+* @param current - point of start
+* @param dest - point of end
 * @returns - true if the points are neighbour otherwise false
 */
-int areNeighbour(const struct Point current, const struct Point dest);
+int areDirectNeighbors(const struct Point current, const struct Point target);
 
 /**
-* checks whether point exist in the route
-* @param route - point to be checked
-* @param point - point to be checked
+* checks if it is an existing point in the route
+* @param route - point to be assessed
+* @param point - point to be assessed
 * @returns - true if the points exist otherwise false
 */
-int isPointOf(const struct Route route, const struct Point point);
+
+int containsPoint(const struct Route route, const struct Point point);
 #endif

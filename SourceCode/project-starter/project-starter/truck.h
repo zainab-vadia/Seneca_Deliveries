@@ -9,72 +9,72 @@
 #define MAX_WEIGHT 1200
 #define MIN_WEIGHT 1
 
-
 /**
 * A truck represents a delivery vehicle with weight and volume capacity.
 */
 struct Truck
 {
-    double currentWeight;  // Current weight in the truck
-    double currentVolume;  // Current volume in the truck
+    double presentWeightInKg;  // weight present already in the truck
+    double presentVolumeInM;  // volume present already in the truck
     struct Route route;  // Route of the truck
     struct Point location; // loaction of the truck
-    char color; 
+    char pathColor;
     // the location must lie on the route
 };
 
-
 /**
-* Initialize a truck with the specified weight, volume, and route.
+* Initialize a truck with the  weight, volume, and route.
 * @param route - the route of the truck
-* @returns - an initialized truck
+* @returns - a configurized truck
 */
-struct Truck initializeTruck(struct Route route, char color);
+struct Truck configureTruck(struct Route route, char color);
 
 /**
-* Find the best truck to deliver a package based on available space ,volume and distance. 
-* @param trucks - array of trucks available for delivery
-* @param numTrucks - the number of trucks in the array
-* @param shipment - the package to be delivered
-* @param map - the map to be referenced
-* @returns - the index of the best truck to deliver the package, or -1 if no suitable truck is found
+* Find the appropriate truck to deliver a package based on available space ,volume and distance.
+* @param trucks - array of delivery trucks available
+* @param numOfTrucks - the number of trucks that are in array
+* @param shipment - the shipment to be delivered
+* @param map - the map to refer to
+* @param color - the color of the truck's route
+* @returns - the index of the best truck to deliver the  shipment, or -1 if no suitable truck is found
 */
-void findBestTruck(struct Truck trucks[], int numTrucks, struct Shipment shipment, const struct Map* map);
+void appropriateTruck(struct Truck trucks[], int numOfTrucks, struct Shipment shipment, const struct Map* map);
 
 /**
 * checks whether the truck has enough space for the Shipment
-* @param truck - truck that is being checked
-* @param shipment - the package to be delivered
-* @returns - true if the package can be added to a truck, false otherwise
+* @param truck - truck that is being checked for space
+* @param shipment - the shipment to be delivered
+* @returns - 1 ithe truck has enough space for the shipment, false otherwise.
 */
-int canShip(struct Truck truck, struct Shipment shipment);
+int enoughSpace(struct Truck truck, struct Shipment shipment);
 
 /**
-* checks which truck has more space
-* @param truck1 - truck to be comapred
-* @param truck2 - truck to be compared 
-* @returns - true if truck 1 has more space false otherwise
+*  checks for the truck with more space
+* @param t1 - truck to be comapred
+* @param t2 - truck to be compared
+* @returns - 1 if t1 has more space false otherwise
 */
-int isMoreEmpty(struct Truck truck1, struct Truck truck2);
+int moreSpace(struct Truck t1, struct Truck t2);
 
 /**
-* evaluate how much space is available in percentage 
+* Calculates the percentage space of both volume and weight left in the truck.
 * @param truck - truck to be evaluated
-* @returns - the percentage value of the space
+* @returns - the value of available percentage space left
 */
-double spacePercentage(struct Truck truck);
+double availablePercentageLeft(struct Truck truck);
 
 /**
 * print the diversion seprated by commas
 * @param route - route to be printed
 */
-void printDiversions(struct Route* route);
+void truckDiversions(struct Route* route);
 
 /**
 * print the diversion seprated by commas
-* @param truck - truck, to which the shipment should be added
+* @param truck - truck shipment is added to
 * @param shipment - shipment to be added
 */
-void loadShipment(struct Truck *truck, const struct Shipment shipment);
+void loadDiversions(struct Truck* truck, const struct Shipment shipment);
 
 #endif
+

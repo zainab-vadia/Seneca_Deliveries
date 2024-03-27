@@ -3,62 +3,62 @@
 #include "mapping.h"
 #include "shipment.h"
 
-struct Truck initializeTruck(struct Route route, char color)
+struct Truck configureTruck(struct Route route, char color)
 {
-    struct Truck truck = {0};
-    struct Point location = {'A', 'A'};
-    truck.currentVolume = 0.0;
-    truck.currentWeight = 0.0;
+    struct Truck truck = { 0 };
+    struct Point location = { 'A', 'A' };
+    truck.presentVolumeInM = 0.0;
+    truck.presentWeightInKg = 0.0;
     truck.route = route;
     truck.location = location;
-    truck.color = color;
+    truck.pathColor = color;
 
     return truck;
 }
 
-void findBestTruck(struct Truck trucks[], int numTrucks, struct Shipment shipment, const struct Map *map)
+void appropriateTruck(struct Truck trucks[], int numOfTrucks, struct Shipment shipment, const struct Map* map)
 {
     int i = -1;
-    int shortestDistance = -1;
-    int truckIndex = -1;
-    struct Route shortestRoute = {0};
+    int leastDistance = -1;
+    int truckNumber = -1;
+    struct Route BestRoute = { 0 };
 
-    for (i = 0; i < numTrucks; i++)
+    for (i = 0; i < numOfTrucks; i++)
     {
-        if (canShip(trucks[i], shipment))
+        if (enoughSpace(trucks[i], shipment))
         {
-            // int index = getClosestPoint(&trucks[i].route, shipment.destination);
-            struct Route route = nearestPoint(map, trucks[i].route, shipment.destination);
 
-            if (route.numPoints > 0 &&                                                                 // if there is a route that can reach the destination
-                (route.numPoints < shortestDistance ||                                                 // if the route is shorter than the previous shortest
-                 shortestDistance == -1 ||                                                             // or the previous shortest is -1(meaning there were no previous shortest route discovered)
-                 (shortestDistance == route.numPoints && isMoreEmpty(trucks[i], trucks[truckIndex])))) // if the new route is as long as the previous one and the new truck is more empty
+            struct Route route = findClosestPoint(map, trucks[i].route, shipment.destination);
+
+            if (route.numPoints > 0 &&
+                (route.numPoints < leastDistance ||
+                    leastDistance == -1 ||
+                    (leastDistance == route.numPoints && moreSpace(trucks[i], trucks[truckNumber]))))
             {
-                shortestRoute = route;
-                truckIndex = i;
-                shortestDistance = shortestRoute.numPoints;
+                BestRoute = route;
+                truckNumber = i;
+                leastDistance = BestRoute.numPoints;
             }
         }
     }
 
-    if (truckIndex != -1)
+    if (truckNumber != -1)
     {
-        loadShipment(&trucks[truckIndex], shipment);
+        loadDiversions(&trucks[truckNumber], shipment);
         printf("Ship on ");
-        if (trucks[truckIndex].color == 'B')
+        if (trucks[truckNumber].pathColor == 'B')
         {
             printf("BLUE LINE, ");
         }
-        else if (trucks[truckIndex].color == 'Y')
+        else if (trucks[truckNumber].pathColor == 'Y')
         {
             printf("YELLOW LINE, ");
         }
-        else if (trucks[truckIndex].color == 'G')
+        else if (trucks[truckNumber].pathColor == 'G')
         {
             printf("GREEN LINE, ");
         }
-        printDiversions(&shortestRoute);
+        truckDiversions(&BestRoute);
     }
     else
     {
@@ -67,22 +67,28 @@ void findBestTruck(struct Truck trucks[], int numTrucks, struct Shipment shipmen
     printf("\n");
 }
 
-int canShip(struct Truck truck, struct Shipment shipment)
-{
-    return MAX_WEIGHT - truck.currentWeight >= shipment.weight && MAX_VOLUME - truck.currentVolume >= shipment.volume;
+
+int enoughSpace(struct Truck truck, struct Shipment shipment) {
+    double availableWeight = MAX_WEIGHT - truck.presentWeightInKg;
+    double availableVolume = MAX_VOLUME - truck.presentVolumeInM;
+
+    double isWeightSufficient = availableWeight >= shipment.weight;
+    double isVolumeSufficient = availableVolume >= shipment.volume;
+
+    return isWeightSufficient && isVolumeSufficient;
 }
 
-int isMoreEmpty(struct Truck truck1, struct Truck truck2)
+int moreSpace(struct Truck t1, struct Truck t2)
 {
-    return spacePercentage(truck1) > spacePercentage(truck2);
+    return availablePercentageLeft(t1) > availablePercentageLeft(t2);
 }
 
-double spacePercentage(struct Truck truck)
+double availablePercentageLeft(struct Truck truck)
 {
-    return ((((truck.currentVolume * 100) / MAX_VOLUME) + ((truck.currentWeight * 100) / MAX_WEIGHT)) / 2);
+    return ((((truck.presentVolumeInM * 100) / MAX_VOLUME) + ((truck.presentWeightInKg * 100) / MAX_WEIGHT)) / 2);
 }
 
-void printDiversions(struct Route *route)
+void truckDiversions(struct Route* route)
 {
     if (route->numPoints == 2)
     {
@@ -100,13 +106,12 @@ void printDiversions(struct Route *route)
     }
 }
 
-void loadShipment(struct Truck *truck, const struct Shipment shipment)
+void loadDiversions(struct Truck* truck, const struct Shipment shipment)
 {
-    if (canShip(*truck, shipment))
+    if (enoughSpace(*truck, shipment))
     {
-        truck->currentVolume += shipment.volume;
-        truck->currentWeight += shipment.weight;
+        truck->presentVolumeInM += shipment.volume;
+        truck->presentWeightInKg += shipment.weight;
         truck->location = shipment.destination;
     }
 }
-
