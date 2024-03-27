@@ -1,4 +1,4 @@
-#include "pch.h"
+##include "pch.h"
 #include "CppUnitTest.h"
 #include "fuctions.h"
 
@@ -28,17 +28,17 @@ namespace UnitTest1
 		}
 		TEST_METHOD(T003)
 		{
-			int expected = 0;
-			struct Route route = { {{1, 1}, {25, 25}, {1, 25}}, 3 };
+			int expected = 2;
+			struct Route route = { {{1, 1}, {5, 5}, {10, 10}}, 3 };
 			struct Point target = { 9, 9 };
 			int result = getClosestPoint(&route, target);
 			Assert::AreEqual(expected, result);
 		}
 		TEST_METHOD(T004)
 		{
-			int expected = 1;
-			struct Route route = { {{1, 7}, {8, 15}, {5, 19}}, 3 };
-			struct Point target = { 25, 25 };
+			int expected = 2;
+			struct Route route = { {{1, 1}, {25, 25},  {1, 25}}, 3 };
+			struct Point target = { 11, 20 };
 			int result = getClosestPoint(&route, target);
 			Assert::AreEqual(expected, result);
 		}
@@ -142,31 +142,31 @@ namespace UnitTest1
 		{	//Truck has enough capacity for shipment.
 			int expected = 1; // True 
 			struct Truck truck = { 1000, 40, getBlueRoute(), { 18 - 1 , 'Y' - 'A' } };
-			struct Shipment shipment = { 200, 10, {12 - 1 , 'M' - 'A'} };
+			struct Shipment shipment = { 200, 1, {12 - 1 , 'M' - 'A'} };
 			int result = enoughSpace(truck, shipment);
 			Assert::AreEqual(expected, result);
 		}
 		TEST_METHOD(T014)
 		{	// Truck exceeding the weight limit.
 			int expected = 0; // False 
-			struct Truck truck = { 1150, 20, getYellowRoute(), { 15 - 1 , 'R' - 'A' } };
-			struct Shipment shipment = { 100, 0.5, {5 - 1 , 'G' - 'A'} };
+			struct Truck truck = { 1150, 20, getYellowRoute(), { 6 - 1 , 'D' - 'A' } };
+			struct Shipment shipment = { 100, 0.5, {20 - 1 , 'G' - 'A'} };
 			int result = enoughSpace(truck, shipment);
 			Assert::AreEqual(expected, result);
 		}
 		TEST_METHOD(T015)
 		{	// Truck exceeding the volume limmit.
 			int expected = 0; // False
-			struct Truck truck = { 200, 50, getGreenRoute(), { 5 - 1 , 'D' - 'A' } };
-			struct Shipment shipment = { 100, 5, {10 - 1 , 'F' - 'A'} };
+			struct Truck truck = { 200, 40, getGreenRoute(), { 5 - 1 , 'K' - 'A' } };
+			struct Shipment shipment = { 100, 15, {10 - 1 , 'T' - 'A'} };
 			int result = enoughSpace(truck, shipment);
 			Assert::AreEqual(expected, result);
 		}
 		TEST_METHOD(T016)
 		{	//Truck cannot ship package due to weight and volume constraints.
 			int expected = 0; // False 
-			struct Truck truck = { 1190, 50, getBlueRoute(), { 9 - 1 , 'I' - 'A' } };
-			struct Shipment shipment = { 20, 5, {7 - 1 , 'H' - 'A'} };
+			struct Truck truck = { 1190, 40, getBlueRoute(), { 9 - 1 , 'J' - 'A' } };
+			struct Shipment shipment = { 20, 12, {18 - 1 , 'X' - 'A'} };
 			int result = enoughSpace(truck, shipment);
 			Assert::AreEqual(expected, result);
 		}
@@ -247,7 +247,7 @@ public:
 			Truck truck;
 			truck.presentVolumeInM = 48; // Only 2 m^3 of capacity left.
 			truck.presentWeightInKg = 500;
-			Shipment shipment = { 200, 5 }; // Shipment exceeds volume capacity by 1 m^3.
+			Shipment shipment = { 200, 3 }; // Shipment exceeds volume capacity by 1 m^3.
 
 			loadDiversions(&truck, shipment);
 
@@ -275,7 +275,7 @@ public:
 			Truck truck;
 			truck.presentVolumeInM = MAX_VOLUME;
 			truck.presentWeightInKg = MAX_WEIGHT; // Truck is already full.
-			Shipment shipment = { 200, 5 }; // Any shipment should not be loaded.
+			Shipment shipment = { 200, 10 }; // Any shipment should not be loaded.
 
 			loadDiversions(&truck, shipment);
 
