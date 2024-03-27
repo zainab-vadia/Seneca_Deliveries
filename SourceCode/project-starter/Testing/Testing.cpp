@@ -28,17 +28,17 @@ namespace UnitTest1
 		}
 		TEST_METHOD(T003)
 		{
-			int expected = 2;
-			struct Route route = { {{1, 1}, {5, 5}, {10, 10}}, 3 };
+			int expected = 0;
+			struct Route route = { {{1, 1}, {25, 25}, {1, 25}}, 3 };
 			struct Point target = { 9, 9 };
 			int result = getClosestPoint(&route, target);
 			Assert::AreEqual(expected, result);
 		}
 		TEST_METHOD(T004)
 		{
-			int expected = 2;
-			struct Route route = { {{-100, -100}, {-50, -50}, {0, 0}}, 3 };
-			struct Point target = { 50, 50 };
+			int expected = 1;
+			struct Route route = { {{1, 7}, {8, 15}, {5, 19}}, 3 };
+			struct Point target = { 25, 25 };
 			int result = getClosestPoint(&route, target);
 			Assert::AreEqual(expected, result);
 		}
@@ -157,23 +157,23 @@ namespace UnitTest1
 		TEST_METHOD(T015)
 		{	// Truck exceeding the volume limmit.
 			int expected = 0; // False
-			struct Truck truck = { 200, 40, getGreenRoute(), { 5 - 1 , 'D' - 'A' } };
-			struct Shipment shipment = { 100, 15, {10 - 1 , 'F' - 'A'} };
+			struct Truck truck = { 200, 50, getGreenRoute(), { 5 - 1 , 'D' - 'A' } };
+			struct Shipment shipment = { 100, 5, {10 - 1 , 'F' - 'A'} };
 			int result = enoughSpace(truck, shipment);
 			Assert::AreEqual(expected, result);
 		}
 		TEST_METHOD(T016)
 		{	//Truck cannot ship package due to weight and volume constraints.
 			int expected = 0; // False 
-			struct Truck truck = { 1190, 40, getBlueRoute(), { 9 - 1 , 'I' - 'A' } };
-			struct Shipment shipment = { 20, 12, {7 - 1 , 'H' - 'A'} };
+			struct Truck truck = { 1190, 50, getBlueRoute(), { 9 - 1 , 'I' - 'A' } };
+			struct Shipment shipment = { 20, 5, {7 - 1 , 'H' - 'A'} };
 			int result = enoughSpace(truck, shipment);
 			Assert::AreEqual(expected, result);
 		}
 	};
 
 
-	
+
 
 
 	TEST_CLASS(readShipmentDetailsBlackBox) {
@@ -194,7 +194,7 @@ public:
 		// Manual Test: Testing invalid size.
 		// Test Data: "1100 2 17G"
 		// Expected Result: Function should indicate the size is invalid
-		
+
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
 		printf("Manual Test T010: Run the program and enter '1100 2 17G' when prompted for shipment details.\n");
@@ -247,7 +247,7 @@ public:
 			Truck truck;
 			truck.presentVolumeInM = 48; // Only 2 m^3 of capacity left.
 			truck.presentWeightInKg = 500;
-			Shipment shipment = { 200, 3 }; // Shipment exceeds volume capacity by 1 m^3.
+			Shipment shipment = { 200, 5 }; // Shipment exceeds volume capacity by 1 m^3.
 
 			loadDiversions(&truck, shipment);
 
@@ -275,7 +275,7 @@ public:
 			Truck truck;
 			truck.presentVolumeInM = MAX_VOLUME;
 			truck.presentWeightInKg = MAX_WEIGHT; // Truck is already full.
-			Shipment shipment = { 200, 10 }; // Any shipment should not be loaded.
+			Shipment shipment = { 200, 5 }; // Any shipment should not be loaded.
 
 			loadDiversions(&truck, shipment);
 
@@ -322,7 +322,7 @@ public:
 		{
 			int expected = 0; // False
 			double weight = -1;
-			double volume = 0;
+			double volume = 1;
 			struct Point destination = { 1 - 1 , 'A' - 'A' };
 			// represents the address '1A'
 			int result = validateShipment(weight, volume, destination);
@@ -330,6 +330,6 @@ public:
 		}
 	};
 
-	
+
 
 };
