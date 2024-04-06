@@ -448,7 +448,7 @@ public:
 	TEST_CLASS(readShipmentDetailsWhiteboxBox) {
 public:
 
-	TEST_METHOD(T017) {
+	TEST_METHOD(TW017) {
 		// Manual Test: Testing valid shipment
 		// Test Data: "1200 0.5 19N"
 		// Expected Result: Function should intialize shipment
@@ -459,7 +459,7 @@ public:
 		printf("Expected Result: An initialized and valid shipment with weight: 1200 kg, volume: 0.5 cubic meters, destination: point 19N.\n");
 	}
 
-	TEST_METHOD(T018) {
+	TEST_METHOD(TW018) {
 		// Manual Test: Testing invalid destination.
 		// Test Data: "1 0.5 29B"
 		// Expected Result: Function should indicate the destination is invalid
@@ -470,7 +470,7 @@ public:
 		printf("Expected Result: The input should be rejected with an appropriate message indicating the destination is invalid.\n");
 	}
 
-	TEST_METHOD(T019) {
+	TEST_METHOD(TW019) {
 		// Manual Test: Testing the exit condition
 		// Test Data: "0 0 X"
 		// Expected Result: Function should terminate and exit
@@ -481,7 +481,7 @@ public:
 		printf("Expected Result: Function should terminate and exit\n");
 	}
 
-	TEST_METHOD(T020) {
+	TEST_METHOD(TW020) {
 		// Manual Test: Testing invalid input format
 		// Test Data: "Y Y YY"
 		// Expected Result: Program ends
