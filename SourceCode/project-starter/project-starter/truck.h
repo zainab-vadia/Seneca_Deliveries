@@ -23,14 +23,14 @@ struct Truck
 };
 
 /**
-* Initialize a truck with the  weight, volume, and route.
+* Configurizes a truck with the  weight, volume, and route.
 * @param route - the route of the truck
 * @returns - a configurized truck
 */
 struct Truck configureTruck(struct Route route, char color);
 
 /**
-* Find the appropriate truck to deliver a package based on available space ,volume and distance.
+* Find the appropriate truck to based on  space ,volume and distance available to deliver the shipment.
 * @param trucks - array of delivery trucks available
 * @param numOfTrucks - the number of trucks that are in array
 * @param shipment - the shipment to be delivered
@@ -50,8 +50,8 @@ int enoughSpace(struct Truck truck, struct Shipment shipment);
 
 /**
 *  checks for the truck with more space
-* @param t1 - truck to be comapred
-* @param t2 - truck to be compared
+* @param t1 - truck to compare
+* @param t2 - truck to compare
 * @returns - 1 if t1 has more space false otherwise
 */
 int moreSpace(struct Truck t1, struct Truck t2);
@@ -70,7 +70,8 @@ double availablePercentageLeft(struct Truck truck);
 void truckDiversions(struct Route* route);
 
 /**
-* print the diversion seprated by commas
+* checks if there is enough space for shipment
+* if yes:
 * @param truck - truck shipment is added to
 * @param shipment - shipment to be added
 */

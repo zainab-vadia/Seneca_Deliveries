@@ -41,22 +41,24 @@ void appropriateTruck(struct Truck trucks[], int numOfTrucks, struct Shipment sh
             }
         }
     }
+    if (truckNumber != -1) {
 
-    if (truckNumber != -1)
-    {
         loadDiversions(&trucks[truckNumber], shipment);
+
         printf("Ship on ");
-        if (trucks[truckNumber].pathColor == 'B')
-        {
+
+        switch (trucks[truckNumber].pathColor) {
+
+        case 'B':
             printf("BLUE LINE, ");
-        }
-        else if (trucks[truckNumber].pathColor == 'Y')
-        {
+            break;
+        case 'Y':
             printf("YELLOW LINE, ");
-        }
-        else if (trucks[truckNumber].pathColor == 'G')
-        {
-            printf("GREEN LINE, ");
+            break;
+        case 'G': printf("GREEN LINE, ");
+            break;
+        default:
+            break;
         }
         truckDiversions(&BestRoute);
     }
@@ -69,6 +71,7 @@ void appropriateTruck(struct Truck trucks[], int numOfTrucks, struct Shipment sh
 
 
 int enoughSpace(struct Truck truck, struct Shipment shipment) {
+
     double availableWeight = MAX_WEIGHT - truck.presentWeightInKg;
     double availableVolume = MAX_VOLUME - truck.presentVolumeInM;
 
@@ -85,7 +88,10 @@ int moreSpace(struct Truck t1, struct Truck t2)
 
 double availablePercentageLeft(struct Truck truck)
 {
-    return ((((truck.presentVolumeInM * 100) / MAX_VOLUME) + ((truck.presentWeightInKg * 100) / MAX_WEIGHT)) / 2);
+        double volumePercentage = (truck.presentVolumeInM * 100) / MAX_VOLUME;
+        double weightPercentage = (truck.presentWeightInKg * 100) / MAX_WEIGHT;
+
+        return (volumePercentage + weightPercentage) / 2;
 }
 
 void truckDiversions(struct Route* route)

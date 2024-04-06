@@ -225,36 +225,26 @@ double distance(const struct Point* p1, const struct Point* p2)
 struct Route shortestPath(const struct Map* map, const struct Point start, const struct Point dest)
 {
 	struct Route result = { {0,0}, 0, DIVERSION };
-	struct Route empty = { {0,0}, 0, DIVERSION };
 	struct Point last = { -1, -1 };
 	struct Point current = start;
 	struct Route possible = { {0,0},0,0 };
 	int close = 0;
-	addPtToRoute(&result, start);
-	
+
 	while (!eqPt(current, dest) && close >= 0)
 	{
-		if (areDirectNeighbors(current, dest))
-		{
-			addPtToRoute(&result, dest);
-			return result;
-		}
 		possible = getPossibleMoves(map, current, last);
 		close = getClosestPoint(&possible, dest);
 		if (close >= 0)
 		{
 			last = current;
 			current = possible.points[close];
-			if (containsPoint(result, current))
-			{
-				return empty; 
-			}
 			addPtToRoute(&result, current);
 		}
 	}
 
 	return result;
 }
+
 
 struct Route BestRoute(const struct Map* map, const struct Point start, const struct Point destination, struct Route route)
 {
@@ -282,15 +272,15 @@ struct Route BestRoute(const struct Map* map, const struct Point start, const st
 
 struct Route findClosestPoint(const struct Map* map, const struct Route route, const struct Point destination)
 {
-	struct Route result = { {0,0}, 1000, DIVERSION };
-	struct Route empty = { {0,0}, 0, DIVERSION };
-	struct Route temp = { {0,0}, 0, DIVERSION };
-	struct Point dropOff;
+	struct Route closestRoute = { {0,0}, 1000, DIVERSION };
+	struct Route emptyRoute = { {0,0}, 0, DIVERSION };
+	struct Route tempRoute = { {0,0}, 0, DIVERSION };
+	struct Point closestDropOff;
 
-	struct Route temp1 = getPossibleMoves(map, destination, destination);
-	if (temp1.numPoints == 0) return empty; 
-		int idx = getClosestPoint(&temp1, destination);
-		dropOff = temp1.points[idx];
+	struct Route possibleMoves = getPossibleMoves(map, destination, destination);
+	if (possibleMoves.numPoints == 0) return emptyRoute;
+	int closestIdx = getClosestPoint(&possibleMoves, destination);
+	closestDropOff = possibleMoves.points[closestIdx];
 
 
 	int i = 0;
@@ -301,22 +291,23 @@ struct Route findClosestPoint(const struct Map* map, const struct Route route, c
 			struct Route empty = { {0,0}, 0, DIVERSION };
 			addPtToRoute(&empty, route.points[i]);
 			addPtToRoute(&empty, destination);
-			result = empty; 
+			closestRoute = empty;
 		}
 		else
 		{
-			// temp = shortestPath(map, route.points[i], dest);
-			temp = BestRoute(map, route.points[i], dropOff, empty);
-			if (!eqPt(destination, dropOff) && temp.numPoints != 0) addPtToRoute(&temp, destination);
+			// tempRoute = shortestPath(map, route.points[i], dest);
+			tempRoute = BestRoute(map, route.points[i], closestDropOff, emptyRoute);
+			if (!eqPt(destination, closestDropOff) && tempRoute.numPoints != 0) addPtToRoute(&tempRoute, destination);
 		}
-		if (temp.numPoints != 0 && temp.numPoints < result.numPoints)
+		if (tempRoute.numPoints != 0 && tempRoute.numPoints < closestRoute.numPoints)
 		{
-			result = temp;
+			closestRoute = tempRoute;
 		}
 	}
 
-	return result; 
+	return closestRoute;
 }
+
 
 struct Route getPossibleMoves(const struct Map* map, const struct Point p1, const struct Point backpath)
 {

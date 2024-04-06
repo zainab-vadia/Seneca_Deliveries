@@ -19,15 +19,15 @@ struct Shipment
 
 /**
 * Read shipment details from the terminal
-* @returns - an initialized package if valid, otherwise an empty shipment
+* @returns - a configurized package if it is valid, otherwise an empty shipment
 */
 struct Shipment readShipmentDetails();
 
 /**
-* Validates the shipment details and provides an error message if any
-* @param weight - the weight of the package
-* @param volume - the volume of the package
-* @param destination - the destination of the package
+* Validates the package details and provides an error message if any
+* @param weight -  weight of  package
+* @param volume - volume of package
+* @param destination -  destination of  package
 * @returns - 1 if the shipment is valid, false otherwise
 */
 int validateShipment(double weight, double volume, struct Point destination);

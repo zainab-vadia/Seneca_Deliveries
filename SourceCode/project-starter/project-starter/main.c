@@ -3,67 +3,63 @@
 #include "mapping.h"
 #include "shipment.h"
 #include "truck.h"
+#include "integration.h"
 
+int main(void) {
 
-int main(void)
-{
-    int option;
-    struct Map baseMap;
-    struct Route blueRoute, greenRoute, yellowRoute;
-    struct Shipment shipment = { 0 };
+    int choice;
+    struct Map map;
+    struct Shipment shipment;
     struct Truck trucks[3];
 
-    do
-    {
-        for (int i = 0; i < 50; i++) printf("\n");
+    while (1) {
+        // Clear the screen 
+        printf("\033[2J\033[H");
 
+        // Display menu
         printf("Choose an option:\n");
         printf("1. Perform Shipment Handling\n");
+        printf("2. Integration Test\n");
         printf("0. Exit\n");
         printf("Enter your choice: ");
 
-        while (scanf("%d", &option) != 1)
-        {
-            printf("Invalid input. Please enter a number: ");
-            while (getchar() != '\n');
+        if (scanf("%d", &choice) != 1) {
+            while (getchar() != '\n'); // Clear the incorrect input
+            printf("\nInvalid input. Please enter a number: ");
         }
 
-        for (int i = 0; i < 50; i++) printf("\n");
+        printf("\033[2J\033[H");
 
-        switch (option)
-        {
-        case 1:
-            baseMap = populateMap();
-            blueRoute = getBlueRoute();
-            greenRoute = getGreenRoute();
-            yellowRoute = getYellowRoute();
+        if (choice == 1) {
+            map = populateMap();
+ 
 
-            trucks[0] = configureTruck(blueRoute, 'B');
-            trucks[1] = configureTruck(yellowRoute, 'Y');
-            trucks[2] = configureTruck(greenRoute, 'G');
+            trucks[0] = configureTruck(getBlueRoute(), 'B');
+            trucks[1] = configureTruck(getYellowRoute(), 'Y');
+            trucks[2] = configureTruck(getGreenRoute(), 'G');
 
-            do
-            {
+            do {
                 shipment = readShipmentDetails();
-                if (shipment.weight != 0)
-                {
-                    appropriateTruck(trucks, 3, shipment, &baseMap);
-                }
-            } while (shipment.weight != 0);
-            break;
+                if (shipment.weight <= 0) break;
 
-        case 0:
+                appropriateTruck(trucks, 3, shipment, &map);
+            } while (shipment.weight > 0);
+        }
+        else if (choice == 2) {
+            integrationTest();
+        }
+        else if (choice == 0) {
             printf("Exiting the program.\n");
-            break;
-
-        default:
+            return 0;
+        }
+        else {
             printf("Invalid option. Please try again.\n");
         }
 
         printf("Press Enter to continue...");
-        while (getchar() != '\n');
-
-    } while (option != 0);
+        while (getchar() != '\n'); // Wait for Enter key
+        while (getchar() != '\n'); // Ensure the buffer is clear
+    }
 
     return 0;
 }

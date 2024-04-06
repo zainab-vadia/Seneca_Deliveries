@@ -1,4 +1,4 @@
-##include "pch.h"
+#include "pch.h"
 #include "CppUnitTest.h"
 #include "fuctions.h"
 
@@ -186,7 +186,7 @@ public:
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
-		printf("Manual Test T009: Run the program and enter '1600 1 17G' when prompted for shipment details.\n");
+		printf("Manual Test T017: Run the program and enter '1600 1 17G' when prompted for shipment details.\n");
 		printf("Expected Result: The input should be rejected with an appropriate message indicating the weight violation.\n");
 	}
 
@@ -197,7 +197,7 @@ public:
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
-		printf("Manual Test T010: Run the program and enter '1100 2 17G' when prompted for shipment details.\n");
+		printf("Manual Test T018: Run the program and enter '1100 2 17G' when prompted for shipment details.\n");
 		printf("Expected Result: The input should be rejected with an appropriate message indicating the size violation.\n");
 	}
 
@@ -208,7 +208,7 @@ public:
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
-		printf("Manual Test T011: Run the program and enter '1100 5 29G' when prompted for shipment details.\n");
+		printf("Manual Test T019: Run the program and enter '1100 5 29G' when prompted for shipment details.\n");
 		printf("Expected Result: The input should be rejected with an appropriate message indicating the incorrect destination.\n");
 	}
 
@@ -219,7 +219,7 @@ public:
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
-		printf("Manual Test T012: Run the program and enter '500 1 3E' when prompted for shipment details.\n");
+		printf("Manual Test T020: Run the program and enter '500 1 3E' when prompted for shipment details.\n");
 		printf("Expected Result: An initialized and valid shipment with weight: 500 kg, volume: 1 cubic meters, destination: point 3E.\n");
 	}
 	};
@@ -284,11 +284,88 @@ public:
 			Assert::AreEqual(static_cast<double>(MAX_VOLUME), truck.presentVolumeInM);
 		}
 	};
-	TEST_CLASS(validateShipmentWhiteBox)
+
+	TEST_CLASS(getClosestPointWhiteBox)
 	{
 	public:
 		//TEST CASES FOR PACKAGE
 		TEST_METHOD(TW001)
+		{
+			int expected = -1;
+			struct Route route = { };
+			struct Point target = { 2, 'T' - 'A' };
+			int result = getClosestPoint(&route, target);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW002)
+		{
+			int expected = 0;
+			struct Route route = { {{-1,'Q' - 'A' }, {-8, 'L' - 'A'}, {-20,  'H' - 'A'}}, 3 };
+			struct Point target = { 5, 'B' - 'A' };
+			int result = getClosestPoint(&route, target);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW003)
+		{
+			int expected = 0;
+			struct Route route = { {{6, 'J' - 'A'}, {1, 'R' - 'A'}, {10, 'K' - 'A'}}, 3 };
+			struct Point target = { -1, 'B' - 'A' };
+			int result = getClosestPoint(&route, target);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW004)
+		{
+			int expected = 3;
+			struct Route route = { {{8,'D' - 'A'}, {3, 'L' - 'A'}, {11,  'C' - 'A'},{17, 'B' - 'A'} }, 4 };
+			struct Point target = { 15, 'B' - 'A' };
+			int result = getClosestPoint(&route, target);
+			Assert::AreEqual(expected, result);
+		}
+	};
+
+	TEST_CLASS(distanceWhiteBox)
+	{
+	public:
+		//TEST CASES FOR PACKAGE
+		TEST_METHOD(TW005)
+		{
+			double expected = 0;
+			struct Point p1 = { 2, 5 };
+			struct Point p2 = { 2, 5 };
+			double result = distance(&p1, &p2);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW006)
+		{
+			double expected = 5;
+			struct Point p1 = { 1.5, 2.5 };
+			struct Point p2 = { 4.5, 6.5 };
+			double result = distance(&p1, &p2);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW007)
+		{
+			double expected = 0;
+			struct Point p1 = { 0, 0 };
+			struct Point p2 = { 0, 0 };
+			double result = distance(&p1, &p2);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW008)
+		{
+			double expected = 24.08318915758459;
+			struct Point p1 = { 22, 'A' - 'A' };
+			struct Point p2 = { 24, 'Y' - 'A' };
+			double result = distance(&p1, &p2);
+			Assert::AreEqual(expected, result);
+		}
+	};
+
+	TEST_CLASS(validateShipmentWhiteBox)
+	{
+	public:
+		//TEST CASES FOR PACKAGE
+		TEST_METHOD(TW009)
 		{
 			int expected = 1; // True
 			double weight = 1200;
@@ -298,7 +375,7 @@ public:
 			int result = validateShipment(weight, volume, destination);
 			Assert::AreEqual(expected, result);
 		}
-		TEST_METHOD(TW002)
+		TEST_METHOD(TW010)
 		{
 			int expected = 0; // False
 			double weight = 1600;
@@ -308,7 +385,7 @@ public:
 			int result = validateShipment(weight, volume, destination);
 			Assert::AreEqual(expected, result);
 		}
-		TEST_METHOD(TW003)
+		TEST_METHOD(TW011)
 		{
 			int expected = 0; // False
 			double weight = 1501;
@@ -318,7 +395,7 @@ public:
 			int result = validateShipment(weight, volume, destination);
 			Assert::AreEqual(expected, result);
 		}
-		TEST_METHOD(TW004)
+		TEST_METHOD(TW012)
 		{
 			int expected = 0; // False
 			double weight = -1;
@@ -330,6 +407,129 @@ public:
 		}
 	};
 
+	TEST_CLASS(enoughSpaceWhiteBox)
+	{
+	public:
+		//TEST CASES FOR PACKAGE
+		TEST_METHOD(TW013)
+		{
+			int expected = 1; // True
+			struct Truck truck = { 200, 35,getBlueRoute(), { 6 - 1 , 'J' - 'A'   } };
+			struct Shipment shipment = { 700, 5, {18 - 1 , 'Y' - 'A'} };
+			int result = enoughSpace(truck, shipment);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW014)
+		{
+			int expected = 0; // False
+			struct Truck truck = { 1200,  40,getYellowRoute(), { 20 - 1, 'F' - 'A'   } };
+			struct Shipment shipment = { 50, 5, {20 - 1 , 'G' - 'A'} };
+			int result = enoughSpace(truck, shipment);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW015)
+		{
+			int expected = 1; // True
+			struct Truck truck = { 950, 45,getGreenRoute(), { 2 - 1, 'T' - 'A'   } };
+			struct Shipment shipment = { 250, 5,{ 10 - 1 , 'Y' - 'A'} };
+			int result = enoughSpace(truck, shipment);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW016)
+		{
+			int expected = 0; // Flase
+			struct Truck truck = { 1000, 50, getBlueRoute(), { 5 - 1 , 'C' - 'A'   } };
+			struct Shipment shipment = { 120, 1, {18 - 1, 'V' - 'A'} };
+			int result = enoughSpace(truck, shipment);
+			Assert::AreEqual(expected, result);
+		}
+	};
 
+	TEST_CLASS(readShipmentDetailsWhiteboxBox) {
+public:
 
+	TEST_METHOD(T017) {
+		// Manual Test: Testing valid shipment
+		// Test Data: "1200 0.5 19N"
+		// Expected Result: Function should intialize shipment
+
+		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
+		// The following code is a placeholder and represents the manual test process.
+		printf("Manual Test T017: Run the program and enter '1200 0.5 19N' when prompted for shipment details.\n");
+		printf("Expected Result: An initialized and valid shipment with weight: 1200 kg, volume: 0.5 cubic meters, destination: point 19N.\n");
+	}
+
+	TEST_METHOD(T018) {
+		// Manual Test: Testing invalid destination.
+		// Test Data: "1 0.5 29B"
+		// Expected Result: Function should indicate the destination is invalid
+
+		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
+		// The following code is a placeholder and represents the manual test process.
+		printf("Manual Test T018: Run the program and enter '1 0.5 29B' when prompted for shipment details.\n");
+		printf("Expected Result: The input should be rejected with an appropriate message indicating the destination is invalid.\n");
+	}
+
+	TEST_METHOD(T019) {
+		// Manual Test: Testing the exit condition
+		// Test Data: "0 0 X"
+		// Expected Result: Function should terminate and exit
+
+		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
+		// The following code is a placeholder and represents the manual test process.
+		printf("Manual Test T019: Run the program and enter '0 0 X' when prompted for shipment details.\n");
+		printf("Expected Result: Function should terminate and exit\n");
+	}
+
+	TEST_METHOD(T020) {
+		// Manual Test: Testing invalid input format
+		// Test Data: "Y Y YY"
+		// Expected Result: Program ends
+
+		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
+		// The following code is a placeholder and represents the manual test process.
+		printf("Manual Test T020: Run the program and enter 'Y Y YY' when prompted for shipment details.\n");
+		printf("Expected Result: Program ends.\n");
+	}
+	};
+
+	TEST_CLASS(areDirectNeighborsWhiteBox)
+	{
+	public:
+		//TEST CASES FOR PACKAGE
+		TEST_METHOD(TW021)
+		{
+			int expected = 1; // True
+			struct Point p1 = { 8 - 1 , 'T' - 'A' };
+			struct Point p2 = { 9 - 1, 'T' - 'A' };
+			int result = areDirectNeighbors(p1, p2);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW022)
+		{
+			int expected = 0; // False
+			struct Point p1 = { 23 - 1 , 'J' - 'A' };
+			struct Point p2 = { 7 - 1 , 'S' - 'A' };
+			int result = areDirectNeighbors(p1, p2);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW023)
+		{
+			int expected = 0; // False
+			struct Point p1 = { 20 - 1 , 'A' - 'A' };
+			struct Point p2 = { 20 - 1, 'A' - 'A' };
+			int result = areDirectNeighbors(p1, p2);
+			Assert::AreEqual(expected, result);
+		}
+		TEST_METHOD(TW024)
+		{
+			int expected = 1; // True
+			struct Point p1 = { 6 - 1 , 'J' - 'A' };
+			struct Point p2 = { 6 - 1 , 'K' - 'A' };
+			int result = areDirectNeighbors(p1, p2);
+			Assert::AreEqual(expected, result);
+		}
+	};
+
+	
 };
