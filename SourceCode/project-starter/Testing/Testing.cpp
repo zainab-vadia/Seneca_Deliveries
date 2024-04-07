@@ -484,12 +484,12 @@ public:
 	TEST_METHOD(TW020) {
 		// Manual Test: Testing invalid input format
 		// Test Data: "Y Y YY"
-		// Expected Result: Program does nothing
+		// Expected Result: Prompts for input again due to incorrect format
 
 		// Note: This test must be conducted manually due to the nature of the readShipmentDetails function.
 		// The following code is a placeholder and represents the manual test process.
 		printf("Manual Test T020: Run the program and enter 'Y Y YY' when prompted for shipment details.\n");
-		printf("Expected Result: Program does nothing.\n");
+		printf("Expected Result: Prompts for input again due to incorrect format.\n");
 	}
 	};
 
