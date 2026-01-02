@@ -61,24 +61,21 @@ Ships tomorrow
 Seneca-Deliveries/
 ├── Documents/
 ├── SourceCode/
-│ ├── project-starter/
-│ │ ├── project-starter/
-│ │ │ ├── main.c
-│ │ │ ├── shipment.c
-│ │ │ ├── shipment.h
-│ │ │ ├── truck.c
-│ │ │ ├── truck.h
-│ │ │ ├── mapping.c
-│ │ │ ├── mapping.h
-│ │ │ ├── integration.c
-│ │ │ ├── integration.h
-│ │ │ └── project-starter.vcxproj
-│ │ └── Testing/
+│   ├── project-starter/
+│   │   ├── project-starter/
+│   │   │   ├── main.c
+│   │   │   ├── shipment.c
+│   │   │   ├── shipment.h
+│   │   │   ├── truck.c
+│   │   │   ├── truck.h
+│   │   │   ├── mapping.c
+│   │   │   ├── mapping.h
+│   │   │   ├── integration.c
+│   │   │   ├── integration.h
+│   │   │   └── project-starter.vcxproj
+│   │   └── Testing/
 ├── README.md
 └── hooksfile
-
-yaml
-Copy code
 
 ---
 
