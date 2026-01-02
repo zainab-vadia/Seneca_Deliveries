@@ -1,97 +1,58 @@
-🚚 Seneca Deliveries
+Seneca Deliveries
 
-A C-based delivery routing system that assigns shipments to the best available truck using capacity constraints and shortest-path routing on a 25 × 25 grid map.
+A C-based delivery routing system that assigns shipments to the most suitable truck using capacity constraints and shortest-path routing on a 25x25 grid map.
 
+Built as part of SFT221 – Software Testing (Winter 2024).
 
-What This Project Does
+Overview
 
-Seneca Deliveries simulates how a local delivery company decides which truck should carry each shipment.
+Seneca Deliveries simulates how a local delivery company decides which truck should deliver each shipment.
 
 For every shipment, the system:
 
-Validates input (weight, box size, destination)
+Validates shipment input (weight, size, destination)
 
-Finds which truck can get closest to the destination
+Determines which truck route comes closest to the destination
 
-Computes the shortest valid path around buildings
+Calculates the shortest valid path around buildings
 
-Selects the least full truck when distances tie
+Selects the least full truck when distances are equal
 
-Defers delivery when no truck can carry the shipment
+Defers shipment if no truck can accept it
 
-The focus is on clean logic, predictable performance, and testability.
+Map Model
 
-🗺 The Map Model
+Delivery area is a fixed 25x25 grid
 
-The city is represented as a 25 × 25 grid
+Coordinates use row number and column letter (example: 8Y)
 
-Coordinates use row + column notation (e.g. 8Y)
+Buildings are impassable
 
-Buildings are impassable cells
+Open cells allow movement
 
-Open space allows free movement
-
-Each truck follows a predefined route and may divert when needed
+Trucks follow predefined routes and may divert when required
 
 All trucks start from the depot at 1A
 
-Trucks & Shipments
+Routing Logic
 
-Trucks
+Euclidean distance is used to determine route proximity
 
-3 delivery trucks (Blue, Green, Yellow)
+Shortest valid path is computed while avoiding buildings
 
-Max weight: 1000 kg
+Greedy A*-inspired approach with no backtracking
 
-Max volume: 36 m³
+Trucks with no valid path are excluded
 
-A truck becomes full when either limit is reached
-
-Shipments
-
-Weight (kg)
-
-Box size (m³)
-
-Destination on the grid
-
-Routing & Decision Logic
-
-Uses Euclidean distance to determine which route passes closest to a destination
-
-Calculates the shortest valid path from that route to the destination
-
-Buildings are treated as obstacles
-
-Pathfinding uses a greedy A*-inspired approach
-
-If two trucks are equally close, the least full truck is selected
-
-If no truck can accept the shipment:
-
-Ships tomorrow
+Least-full truck is chosen when distances tie
 
 Performance
 
-Fixed grid size (25 × 25)
-
-Fixed number of trucks (3)
-
-No external libraries
+Fixed grid size and truck count
 
 Predictable, bounded runtime per shipment
 
-Designed to be efficient, simple, and easy to reason about.
-
-Tech Stack
-
-Language: C (ANSI / C11)
-
-Build: GCC, Visual Studio
-
-Testing: Unit, integration, and acceptance tests
-
-Design: Modular .c / .h architecture
+No external libraries required
 
 Project Structure
 Seneca-Deliveries/
@@ -100,35 +61,42 @@ Seneca-Deliveries/
 │   ├── project-starter/
 │   │   ├── project-starter/
 │   │   │   ├── main.c
-│   │   │   ├── shipment.c / shipment.h
-│   │   │   ├── truck.c / truck.h
-│   │   │   ├── mapping.c / mapping.h
-│   │   │   ├── integration.c / integration.h
+│   │   │   ├── shipment.c
+│   │   │   ├── shipment.h
+│   │   │   ├── truck.c
+│   │   │   ├── truck.h
+│   │   │   ├── mapping.c
+│   │   │   ├── mapping.h
+│   │   │   ├── integration.c
+│   │   │   ├── integration.h
 │   │   │   └── project-starter.vcxproj
 │   │   └── Testing/
 ├── README.md
 └── hooksfile
 
-Build & Run
+Build and Run
+
 Visual Studio (Windows)
 
 Open:
-
 SourceCode/project-starter/project-starter.sln
 
+Build:
+Ctrl + Shift + B
 
-Build: Ctrl + Shift + B
-Run: Ctrl + F5
+Run:
+Ctrl + F5
 
-GCC
+GCC (Linux, macOS, MinGW)
+
 cd SourceCode/project-starter/project-starter
 gcc -o deliveries main.c shipment.c truck.c mapping.c integration.c
 ./deliveries
 
 Testing
 
-Unit, integration, and acceptance tests included
+Unit, integration, and acceptance tests located in Testing/
 
-Focused on routing accuracy, validation, and system integration
+Designed to validate routing, capacity handling, and integration logic
 
-Supports automated testing via Git hooks
+Supports automated test execution via Git hooks
