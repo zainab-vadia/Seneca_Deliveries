@@ -1,15 +1,101 @@
-# 📦 Seneca Deliveries — Software Testing Project  
-A structured C-based project for managing shipments, trucks, and integration logic.  
-Built as part of **SFT221 – Winter 2024 (Group 2)**.
+🚚 Seneca Deliveries
 
----
+A C-based delivery routing system that assigns shipments to the best available truck using capacity constraints and shortest-path routing on a 25 × 25 grid map.
 
-## 📁 Project Structure
 
-```
+What This Project Does
+
+Seneca Deliveries simulates how a local delivery company decides which truck should carry each shipment.
+
+For every shipment, the system:
+
+Validates input (weight, box size, destination)
+
+Finds which truck can get closest to the destination
+
+Computes the shortest valid path around buildings
+
+Selects the least full truck when distances tie
+
+Defers delivery when no truck can carry the shipment
+
+The focus is on clean logic, predictable performance, and testability.
+
+🗺 The Map Model
+
+The city is represented as a 25 × 25 grid
+
+Coordinates use row + column notation (e.g. 8Y)
+
+Buildings are impassable cells
+
+Open space allows free movement
+
+Each truck follows a predefined route and may divert when needed
+
+All trucks start from the depot at 1A
+
+Trucks & Shipments
+
+Trucks
+
+3 delivery trucks (Blue, Green, Yellow)
+
+Max weight: 1000 kg
+
+Max volume: 36 m³
+
+A truck becomes full when either limit is reached
+
+Shipments
+
+Weight (kg)
+
+Box size (m³)
+
+Destination on the grid
+
+Routing & Decision Logic
+
+Uses Euclidean distance to determine which route passes closest to a destination
+
+Calculates the shortest valid path from that route to the destination
+
+Buildings are treated as obstacles
+
+Pathfinding uses a greedy A*-inspired approach
+
+If two trucks are equally close, the least full truck is selected
+
+If no truck can accept the shipment:
+
+Ships tomorrow
+
+Performance
+
+Fixed grid size (25 × 25)
+
+Fixed number of trucks (3)
+
+No external libraries
+
+Predictable, bounded runtime per shipment
+
+Designed to be efficient, simple, and easy to reason about.
+
+Tech Stack
+
+Language: C (ANSI / C11)
+
+Build: GCC, Visual Studio
+
+Testing: Unit, integration, and acceptance tests
+
+Design: Modular .c / .h architecture
+
+Project Structure
 Seneca-Deliveries/
-│
-├── Documents/                
+├── Documents/
 ├── SourceCode/
 │   ├── project-starter/
 │   │   ├── project-starter/
@@ -18,110 +104,31 @@ Seneca-Deliveries/
 │   │   │   ├── truck.c / truck.h
 │   │   │   ├── mapping.c / mapping.h
 │   │   │   ├── integration.c / integration.h
-│   │   │   └── project-starter.vcxproj*
+│   │   │   └── project-starter.vcxproj
 │   │   └── Testing/
-│   └── README.md
-│
 ├── README.md
 └── hooksfile
-```
 
----
+Build & Run
+Visual Studio (Windows)
 
-## 🚚 Project Overview
+Open:
 
-The **Seneca Deliveries System** models core logistics operations using modular C programming:
+SourceCode/project-starter/project-starter.sln
 
-### ✔ Shipments  
-- Stores shipment details (ID, weight, destination, status)
 
-### ✔ Trucks  
-- Tracks truck capacity, current load, and assigned shipments
+Build: Ctrl + Shift + B
+Run: Ctrl + F5
 
-### ✔ Mapping  
-- Matches shipments to valid trucks  
-- Ensures weight/capacity rules are respected
-
-### ✔ Integration  
-- Connects all modules together  
-- Provides full-system operations and verification logic
-
-This project focuses on **modular design**, **header organization**, and **software testing principles**.
-
----
-
-## 🛠 Build & Run Instructions
-
-### 🔹 Visual Studio (Windows)
-1. Open:
-   ```
-   SourceCode/project-starter/project-starter.sln
-   ```
-2. Build → **Ctrl + Shift + B**  
-3. Run → **Ctrl + F5**
-
----
-
-### 🔹 GCC (Linux / Mac / Windows MinGW)
-
-Navigate into the project directory:
-
-```
+GCC
 cd SourceCode/project-starter/project-starter
-```
-
-Compile:
-
-```
 gcc -o deliveries main.c shipment.c truck.c mapping.c integration.c
-```
-
-Run:
-
-```
 ./deliveries
-```
 
----
+Testing
 
-## 🧪 Testing
+Unit, integration, and acceptance tests included
 
-The `Testing/` directory contains:
+Focused on routing accuracy, validation, and system integration
 
-- Manual & automated tests  
-- Input sets  
-- Validation files  
-
-Example command:
-
-```
-gcc -o tests TestFile.c shipment.c truck.c mapping.c integration.c
-./tests
-```
-
----
-
-## ✨ Features Implemented
-
-- Full modular C project  
-- Separation of logic using `.c` + `.h`  
-- Defensive programming & validation  
-- Integration logic for end-to-end workflow  
-- Ready-to-run Visual Studio solution  
-- Expandable testing folder  
-
----
-
-## 📌 Requirements
-
-- ANSI C / C11  
-- No external libraries unless provided  
-- Must meet SFT221 course standards  
-- Must pass unit + integration tests  
-
----
-
-
-## 📄 License
-
-For academic use only.  
+Supports automated testing via Git hooks
